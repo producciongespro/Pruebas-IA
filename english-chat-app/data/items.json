@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "What´s your name?",
+    "phrase":  "my name is",
+    "desc": "asking for your name",
+    "audioFile": "my_name",
+    "ext": "mp3"
+  },
+  {
+    "id": 2,
+    "title": "Where do you live?",
+    "phrase": "(I live in |I am living in|I'm living in)",
+    "desc": "asking for your home",
+    "audioFile": "where_live",
+    "ext": "mp3"
+  }
+]
