@@ -7,10 +7,16 @@ let selectedFaceDetector = SSD_MOBILENETV1;
 let minConfidence = 0.5;
 let inputSize = 512;
 let scoreThreshold = 0.5;
+let withBoxes = true;
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('overlay');
 const ageDisplay = document.getElementById('age');
+const timeDisplay = document.getElementById('time');
+const fpsDisplay = document.getElementById('fps');
+
+let forwardTimes = [];
+let predictedAges = [];
 
 // Función para cargar los modelos
 async function loadModels() {
@@ -38,25 +44,48 @@ async function startVideo() {
   video.srcObject = stream;
 }
 
+// Promedio de predicciones para estabilizar la edad
+function interpolateAgePredictions(age) {
+  predictedAges = [age].concat(predictedAges).slice(0, 30);
+  const avgPredictedAge = predictedAges.reduce((total, a) => total + a) / predictedAges.length;
+  return avgPredictedAge;
+}
+
+// Medición de tiempo de procesamiento
+function updateTimeStats(timeInMs) {
+  forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30);
+  const avgTimeInMs = forwardTimes.reduce((total, t) => total + t) / forwardTimes.length;
+  timeDisplay.textContent = Math.round(avgTimeInMs);
+  fpsDisplay.textContent = Math.round(1000 / avgTimeInMs);
+}
+
 // Detecta rostros en el video y muestra los resultados
 async function detectFaces() {
   const displaySize = { width: video.videoWidth, height: video.videoHeight };
   faceapi.matchDimensions(canvas, displaySize);
 
   setInterval(async () => {
+    const ts = Date.now();
+
     const detections = await faceapi
       .detectAllFaces(video, getFaceDetectorOptions())
       .withAgeAndGender();
+
+    updateTimeStats(Date.now() - ts);
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
-    faceapi.draw.drawDetections(canvas, resizedDetections);
+
+    if (withBoxes) {
+      faceapi.draw.drawDetections(canvas, resizedDetections);
+    }
 
     if (detections.length > 0) {
       const { age } = detections[0];
-      ageDisplay.textContent = Math.round(age);
+      const interpolatedAge = interpolateAgePredictions(age);
+      ageDisplay.textContent = Math.round(interpolatedAge);
     }
   }, 1000);
 }
@@ -67,6 +96,7 @@ function initControls() {
   const minConfidenceInput = document.getElementById('minConfidence');
   const inputSizeInput = document.getElementById('inputSize');
   const scoreThresholdInput = document.getElementById('scoreThreshold');
+  const toggleBoundingBoxes = document.getElementById('toggleBoundingBoxes');
   const tinyFaceDetectorControls = document.getElementById('tinyFaceDetectorControls');
 
   // Cambiar entre detectores faciales
@@ -92,6 +122,11 @@ function initControls() {
   // Ajustar scoreThreshold
   scoreThresholdInput.addEventListener('input', (e) => {
     scoreThreshold = parseFloat(e.target.value);
+  });
+
+  // Alternar cuadros delimitadores
+  toggleBoundingBoxes.addEventListener('change', (e) => {
+    withBoxes = e.target.checked;
   });
 }
 
