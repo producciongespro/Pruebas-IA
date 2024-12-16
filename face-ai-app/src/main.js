@@ -1,7 +1,8 @@
-import * as faceapi from 'face-api.js';
+import * as faceapi from "face-api.js";
+import "../css/master.css";
 
-const SSD_MOBILENETV1 = 'ssd_mobilenetv1';
-const TINY_FACE_DETECTOR = 'tiny_face_detector';
+const SSD_MOBILENETV1 = "ssd_mobilenetv1";
+const TINY_FACE_DETECTOR = "tiny_face_detector";
 
 let selectedFaceDetector = SSD_MOBILENETV1;
 let minConfidence = 0.5;
@@ -9,18 +10,18 @@ let inputSize = 512;
 let scoreThreshold = 0.5;
 let withBoxes = true;
 
-const video = document.getElementById('video');
-const canvas = document.getElementById('overlay');
-const ageDisplay = document.getElementById('age');
-const timeDisplay = document.getElementById('time');
-const fpsDisplay = document.getElementById('fps');
+const video = document.getElementById("video");
+const canvas = document.getElementById("overlay");
+const ageDisplay = document.getElementById("age");
+const timeDisplay = document.getElementById("time");
+const fpsDisplay = document.getElementById("fps");
 
 let forwardTimes = [];
 let predictedAges = [];
 
 // Función para cargar los modelos
 async function loadModels() {
-  const MODEL_URL = '/weights';
+  const MODEL_URL = "/weights";
 
   if (selectedFaceDetector === SSD_MOBILENETV1) {
     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
@@ -47,14 +48,16 @@ async function startVideo() {
 // Promedio de predicciones para estabilizar la edad
 function interpolateAgePredictions(age) {
   predictedAges = [age].concat(predictedAges).slice(0, 30);
-  const avgPredictedAge = predictedAges.reduce((total, a) => total + a) / predictedAges.length;
+  const avgPredictedAge =
+    predictedAges.reduce((total, a) => total + a) / predictedAges.length;
   return avgPredictedAge;
 }
 
 // Medición de tiempo de procesamiento
 function updateTimeStats(timeInMs) {
   forwardTimes = [timeInMs].concat(forwardTimes).slice(0, 30);
-  const avgTimeInMs = forwardTimes.reduce((total, t) => total + t) / forwardTimes.length;
+  const avgTimeInMs =
+    forwardTimes.reduce((total, t) => total + t) / forwardTimes.length;
   timeDisplay.textContent = Math.round(avgTimeInMs);
   fpsDisplay.textContent = Math.round(1000 / avgTimeInMs);
 }
@@ -75,7 +78,7 @@ async function detectFaces() {
 
     const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     if (withBoxes) {
@@ -92,40 +95,42 @@ async function detectFaces() {
 
 // Inicializa los controles dinámicos
 function initControls() {
-  const faceDetectorSelect = document.getElementById('selectFaceDetector');
-  const minConfidenceInput = document.getElementById('minConfidence');
-  const inputSizeInput = document.getElementById('inputSize');
-  const scoreThresholdInput = document.getElementById('scoreThreshold');
-  const toggleBoundingBoxes = document.getElementById('toggleBoundingBoxes');
-  const tinyFaceDetectorControls = document.getElementById('tinyFaceDetectorControls');
+  const faceDetectorSelect = document.getElementById("selectFaceDetector");
+  const minConfidenceInput = document.getElementById("minConfidence");
+  const inputSizeInput = document.getElementById("inputSize");
+  const scoreThresholdInput = document.getElementById("scoreThreshold");
+  const toggleBoundingBoxes = document.getElementById("toggleBoundingBoxes");
+  const tinyFaceDetectorControls = document.getElementById(
+    "tinyFaceDetectorControls"
+  );
 
   // Cambiar entre detectores faciales
-  faceDetectorSelect.addEventListener('change', async (e) => {
+  faceDetectorSelect.addEventListener("change", async (e) => {
     selectedFaceDetector = e.target.value;
 
     tinyFaceDetectorControls.style.display =
-      selectedFaceDetector === TINY_FACE_DETECTOR ? 'block' : 'none';
+      selectedFaceDetector === TINY_FACE_DETECTOR ? "block" : "none";
 
     await loadModels(); // Recargar modelos al cambiar de detector
   });
 
   // Ajustar minConfidence
-  minConfidenceInput.addEventListener('input', (e) => {
+  minConfidenceInput.addEventListener("input", (e) => {
     minConfidence = parseFloat(e.target.value);
   });
 
   // Ajustar inputSize
-  inputSizeInput.addEventListener('input', (e) => {
+  inputSizeInput.addEventListener("input", (e) => {
     inputSize = parseInt(e.target.value);
   });
 
   // Ajustar scoreThreshold
-  scoreThresholdInput.addEventListener('input', (e) => {
+  scoreThresholdInput.addEventListener("input", (e) => {
     scoreThreshold = parseFloat(e.target.value);
   });
 
   // Alternar cuadros delimitadores
-  toggleBoundingBoxes.addEventListener('change', (e) => {
+  toggleBoundingBoxes.addEventListener("change", (e) => {
     withBoxes = e.target.checked;
   });
 }
@@ -135,7 +140,7 @@ async function init() {
   await loadModels();
   await startVideo();
 
-  video.addEventListener('play', () => {
+  video.addEventListener("play", () => {
     detectFaces();
   });
 
