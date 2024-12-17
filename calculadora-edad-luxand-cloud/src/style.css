@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+h1 {
+  margin-top: 20px;
+  font-size: 2rem;
+}
+
+#container {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+#video, #overlay {
+  width: 640px;
+  height: 480px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+p {
+  font-size: 1.5rem;
+  margin-top: 10px;
+}

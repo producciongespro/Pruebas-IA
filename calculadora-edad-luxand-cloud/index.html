@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculadora de edad</title>
+  </head>
+
+  <body>
+    <div>
+      <h2>¿Qué tan viejo(a) joven te ves?</h2>
+
+      <div style="padding-bottom: 20px">
+        Selecciona una foto de una persona para detectar su edad
+      </div>
+      <input type="file"  accept="image/jpg, image/jpeg"  name="photo" id="inputFoto" />
+      <div
+        id="detect-result"
+        style="
+          display: none;
+          font-family: monospace;
+          background-color: #606a94;
+          color: white;
+          margin-top: 20px;
+          max-width: 600px;
+          padding: 10px;
+        "
+      >
+        Edad <span id="spnEdad"> </span> Género <span id="spnGenero"></span>
+      </div>
+    </div>
+  </body>
+
+  <script src="./src/main.js" type="module"></script>
+</html>
