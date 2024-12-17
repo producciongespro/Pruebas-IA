@@ -35,11 +35,12 @@ export class Preloader extends Scene
         this.load.image('car', 'blue_car.png');
         this.load.image('bwCar', 'bw_car.png');
         this.load.image('odCar', 'open_door_car.png');
+        this.load.image('lightsOn', 'lights_on.png');
         this.load.image('btnMenu', 'btn_menu.png');
         this.load.image('switchOn', 'switch_on.png');
         this.load.image('switchOff', 'switch_off.png');
         
-
+        
     }
 
     create ()

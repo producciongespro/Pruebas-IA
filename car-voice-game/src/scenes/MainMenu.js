@@ -23,7 +23,7 @@ export class MainMenu extends Scene
         .on("pointerdown", ()=> this.cargarJuego("en-US")  )
 
 
-        this.add.text(512, 560, 'Iniciar Juego (Expañol) ', {
+        this.add.text(512, 560, 'Iniciar Juego (Español) ', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

@@ -51,9 +51,8 @@ export class Game extends Scene {
       })
       .setOrigin(0.5);
 
-
-      this.txtEstadoPuertas = this.add
-      .text(this.center.x + 200, 20,"", {
+    this.txtEstadoPuertas = this.add
+      .text(this.center.x + 200, 20, "", {
         fontFamily: "Arial Black",
         fontSize: 24,
         color: "#ff0000",
@@ -69,19 +68,21 @@ export class Game extends Scene {
       .setScale(0.5)
       .setCollideWorldBounds(true);
     this.auto.abierto = false;
+    this.auto.luces = false;
 
     this.startRecognition();
   }
 
   update() {
-    this.commit = false;
-    console.log("this.direccion", this.direccion);
+    this.commit = false;        
     if (!this.auto.abierto) {
       this.moverAdelante();
-      this.moverAtras();
-      this.txtEstadoPuertas.setText("")
+      this.moverAtras();      
+      this.txtEstadoPuertas.setText("");
     } else {
-        this.txtEstadoPuertas.setText( `${ this.idioma === "es-ES" ? "Puertas abiertas" : "Doors open"   }`   )
+      this.txtEstadoPuertas.setText(
+        `${this.idioma === "es-ES" ? "Puertas abiertas" : "Doors open"}`
+      );
     }
 
     this.detenerAuto();
@@ -119,6 +120,7 @@ export class Game extends Scene {
       console.log("Nuevo comando:", this.transcript);
       this.girarAuto();
       this.togglePuertas();
+      this.toggleLights();
     }
   }
 
@@ -156,8 +158,9 @@ export class Game extends Scene {
 
   moverAtras() {
     if (
+      this.transcript === "atrás" ||
       this.transcript === "reversa" ||
-      this.transcript === "backward" ||
+      this.transcript === "backwards" ||
       this.transcript === "reverse"
     ) {
       if (this.direccion === 0 || this.direccion === 360) {
@@ -195,7 +198,17 @@ export class Game extends Scene {
         this.auto.abierto = true;
       }
     }
+  }
 
-    
+  toggleLights() {
+    if (this.transcript === "luces" || this.transcript === "lights") {
+      if (this.auto.luces) {
+        this.auto.setTexture("car");
+        this.auto.luces = false;
+      } else {
+        this.auto.setTexture("lightsOn");
+        this.auto.luces = true;
+      }
+    }
   }
 }
