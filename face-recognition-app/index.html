@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,8 @@
     <meta name="author" content="Luis Ch C">
     <meta name="keywords" content="Face API, detección facial, género, edad, JavaScript">
     <title>Detección Facial con Face API</title>
+    
+    
     <style>
         /* Estilos para centrar el video y el canvas */
         body {
@@ -22,8 +24,7 @@
             overflow: hidden;
         }
         #container {
-            display: flex;
-            justify-content: center;
+            text-align: center;                        
             position: relative;
         }
         canvas {
@@ -34,20 +35,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         #visor {
-            margin-left: 1em;
+            text-align: center;
+            margin-top: 1em;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <canvas id="canvas"></canvas>
-        <video id="video-feed" height="260" width="320" autoplay></video>
+    <div id="container">        
+        <h2>Detección edad y género con Face API</h2>
+        <video id="video-feed" height="120" width="160" autoplay></video>
+        <div id="visor">
+            Procesando datos. Por favor espere...
+        </div>
     </div>
+    
 
-    <div id="visor">
-        Procesando datos. Por favor espere...
-    </div>
+    
 
+    
     <script type="module" src="/src/main.js"></script>
 </body>
 </html>

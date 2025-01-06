@@ -1,26 +1,32 @@
-import faceapi from "./vendor/face-api-wrapper";
+import * as faceapi from "face-api.js";
 
 const loadModels = async () => {
   await Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
-    faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
-    faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
-    faceapi.nets.ageGenderNet.loadFromUri("./models"),
-    faceapi.nets.faceExpressionNet.loadFromUri("./models"),
+    //Detecta la cara y devuelve las coordenadas de la cara. Es el modelo más ligero y rápido
+    faceapi.nets.ssdMobilenetv1.loadFromUri("./models").then(() => console.log("SSD MobileNet cargado")),
+    //Detecta la cara y devuelve las coordenadas de la cara 
+    faceapi.nets.faceLandmark68Net.loadFromUri("./models").then(() => console.log("Face Landmark cargado")),
+    //Compara la cara detectada con las caras conocidas (base de datos) y devuelve el nombre de la persona embeddings
+    //faceapi.nets.faceRecognitionNet.loadFromUri("./models").then(() => console.log("Face Recognition cargado")),
+    //Detecta la edad y el género de la persona detectada. Es un modelo muy ligero y rápido
+    faceapi.nets.ageGenderNet.loadFromUri("./models").then(() => console.log("Age & Gender cargado")),
+    //Detecta la expresión facial de la persona detectada. Emociones como felicidad, tristeza, enojo, sorpresa, neutral, miedo y asco
+    //faceapi.nets.faceExpressionNet.loadFromUri("./models").then(() => console.log("Face Expression cargado")),
   ]);
-  console.log("Modelos cargados");
+  
 };
 
-const startVideoFeed = async (visorEl) => {
+const startVideoFeed = async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      //video: { width: 340, height: 260 },
+      video: { width: 320, height: 240 },
       video: true,
       audio: false,
     });
     const videoFeedEl = document.getElementById("video-feed");
     const visorEl = document.getElementById("visor");
     videoFeedEl.srcObject = stream;
+    
 
     videoFeedEl.onloadedmetadata = () => {      
       processVideo(videoFeedEl,  visorEl );
@@ -62,7 +68,8 @@ const processVideo = async (videoFeedEl,  visorEl) => {
 
     // Dibujar texto en el canvas
     const text = `Edad: ${Math.round(smoothedAge)} años, Género: ${gender === "male" ?  "Masculino" :  "Femenino" }`;
-    visorEl.innerHTML = text;    
+    visorEl.innerHTML = text;
+    
 
     
   });
