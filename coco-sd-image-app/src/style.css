@@ -1,0 +1,60 @@
+body {
+  font-family: helvetica, arial, sans-serif;
+  margin: 2em;
+  color: cadetblue;
+  background-color: #3D3D3D;
+  text-align: center;
+}
+
+.btn-turquesa {
+	box-shadow: 0px 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:20px;
+	font-weight:bold;
+	padding:13px 32px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+}
+.btn-turquesa:hover {
+	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	background-color:#408c99;
+}
+.btn-turquesa:active {
+	position:relative;
+	top:1px;
+}
+
+.invisible {
+  display: none;
+}
+
+
+.video-container {
+  position: relative;
+  width: 100%; /* Ajusta según el tamaño deseado */
+  max-width: 640px; /* Opcional: restringe el tamaño máximo */
+  margin: auto; /* Centra el contenedor horizontalmente */
+}
+
+#video,
+#canvas {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 640px; /* Asegura que ambos ocupen el mismo espacio */
+  height: 480px;
+  object-fit: cover; /* Asegura que el contenido se escale correctamente */
+  z-index: 0; /* Opcional para el video */
+
+}
+
+#canvas {
+  z-index: 1; /* Canvas detrás del video */
+  background-color: transparent
+}
